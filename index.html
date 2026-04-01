@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VynnHost Pro | Cyber Station</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        :root { --cyan: #00f2fe; --mag: #ff00ff; --red: #ff003c; --green: #0ff043; --bg: #010103; }
+
+        body { background: var(--bg); color: white; font-family: 'Orbitron', sans-serif; margin: 0; display: flex; justify-content: center; padding: 20px 15px; overflow-x: hidden; }
+
+        body::before { content: ""; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 100; background-size: 100% 4px, 3px 100%; pointer-events: none; }
+
+        #s-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+        .container { width: 100%; max-width: 430px; text-align: center; z-index: 10; }
+
+        .avatar { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 10px; border: 2px solid var(--cyan); box-shadow: 0 0 15px var(--cyan); background: url('https://files.catbox.moe/stoodt.jpg') center/cover; animation: float 3s ease-in-out infinite; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        .glitch { font-size: 22px; font-weight: bold; letter-spacing: 2px; text-shadow: 2px 2px var(--red), -2px -2px var(--cyan); }
+
+        .m-box { background: rgba(0, 242, 254, 0.05); border: 1px solid var(--cyan); margin: 15px 0; padding: 5px; font-size: 9px; color: var(--cyan); overflow: hidden; }
+
+        .m-text { display: inline-block; animation: scroll 15s linear infinite; white-space: nowrap; }
+
+        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        .btn-m { background: none; border: 1px solid var(--mag); color: var(--mag); padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 10px; margin-bottom: 20px; }
+
+        .label { font-size: 10px; color: var(--cyan); text-align: left; margin: 20px 0 10px 5px; letter-spacing: 3px; display: flex; align-items: center; }
+
+        .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; text-decoration: none; color: white; transition: 0.3s; cursor: pointer; }
+
+        .card:hover { border-color: var(--cyan); background: rgba(0, 242, 254, 0.1); transform: scale(1.02); }
+
+        .card i { font-size: 18px; width: 30px; color: var(--cyan); }
+
+        .card .info { flex: 1; text-align: left; font-size: 12px; }
+
+        .card .price { color: var(--green); font-weight: bold; font-size: 12px; border-left: 1px solid #333; padding-left: 10px; }
+
+        
+
+        /* MODAL QRIS */
+
+        #qModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center; flex-direction:column; padding:20px; backdrop-filter: blur(10px); }
+
+        .m-content { background:#111; border:2px solid var(--cyan); padding:20px; border-radius:15px; text-align:center; max-width:100%; box-shadow: 0 0 30px var(--cyan); }
+
+        .m-content img { width: 250px; border-radius: 10px; margin: 10px 0; border: 2px solid white; }
+
+    </style>
+
+</head>
+
+<body>
+
+    <canvas id="s-canvas"></canvas>
+
+    <audio id="bgm" loop><source src="https://files.catbox.moe/ul1rh5.mp3" type="audio/mpeg"></audio>
+
+    <div class="container">
+
+        <div class="avatar"></div>
+
+        <div class="glitch">VYNNHOST PRO</div>
+
+        <div class="m-box"><div class="m-text">SISTEM QRIS DANA AKTIF • PRODUK OTOMATIS MURAH • GABUNG RESELLER SEKARANG!</div></div>
+
+        <button class="btn-m" onclick="playM()">SYNC AUDIO 😈</button>
+
+        <div class="label">PTERODACTYL PANEL</div>
+
+        <div class="card" onclick="openQ('Ptero 2GB', '1500')"><i class="fa-solid fa-box"></i><div class="info">Panel Ptero 2GB</div><div class="price">Rp 1.500</div></div>
+
+        <div class="card" onclick="openQ('Ptero 4GB', '1500')"><i class="fa-solid fa-box"></i><div class="info">Panel Ptero 4GB</div><div class="price">Rp 1.500</div></div>
+
+        <div class="card" onclick="openQ('Ptero 6GB', '2000')"><i class="fa-solid fa-box"></i><div class="info">Panel Ptero 6GB</div><div class="price">Rp 2.000</div></div>
+
+        <div class="card" onclick="openQ('Ptero 8GB', '2000')"><i class="fa-solid fa-box"></i><div class="info">Panel Ptero 8GB</div><div class="price">Rp 2.000</div></div>
+
+        <div class="card" onclick="openQ('Ptero 10GB', '2500')"><i class="fa-solid fa-box"></i><div class="info">Panel Ptero 10GB</div><div class="price">Rp 2.500</div></div>
+
+        <div class="card" onclick="openQ('Ptero Unlimited', '3000')"><i class="fa-solid fa-infinity"></i><div class="info">Panel Unlimited</div><div class="price">Rp 3.000</div></div>
+
+        <div class="label" style="color:var(--mag);">CLOUD VPS SERVER</div>
+
+        <div class="card" onclick="openQ('VPS 4GB R4C2', '12000')" style="border-color:var(--mag);"><i class="fa-solid fa-server" style="color:var(--mag);"></i><div class="info">VPS 4GB CPU 2 (R4C2)</div><div class="price" style="color:var(--cyan);">Rp 12.000</div></div>
+
+        <div class="card" onclick="openQ('VPS 8GB R8C4', '15000')" style="border-color:var(--mag);"><i class="fa-solid fa-server" style="color:var(--mag);"></i><div class="info">VPS 8GB CPU 4 (R8C4)</div><div class="price" style="color:var(--cyan);">Rp 15.000</div></div>
+
+    </div>
+
+    <div id="qModal">
+
+        <div class="m-content">
+
+            <h3 id="qTitle" style="color:var(--cyan); margin:0;"></h3>
+
+            <p id="qPrice" style="color:var(--green); font-weight:bold;"></p>
+
+            <img src="https://files.catbox.moe/GANTI_DENGAN_QRIS_KAMU.jpg" alt="QRIS">
+
+            <p style="font-size:9px; color:#aaa;">SCAN & TRANSFER SESUAI NOMINAL</p>
+
+            <button onclick="confirm()" style="background:var(--green); width:100%; border:none; padding:10px; border-radius:5px; font-weight:bold; cursor:pointer;">KONFIRMASI (WA)</button>
+
+            <p onclick="closeQ()" style="cursor:pointer; font-size:11px; margin-top:10px;">BATAL</p>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        let pName = ""; let pPrice = "";
+
+        function playM() { var a = document.getElementById("bgm"); if (a.paused) a.play(); else a.pause(); }
+
+        function openQ(n, p) { pName = n; pPrice = p; document.getElementById("qTitle").innerText = n; document.getElementById("qPrice").innerText = "Rp " + p; document.getElementById("qModal").style.display = "flex"; }
+
+        function closeQ() { document.getElementById("qModal").style.display = "none"; }
+
+        function confirm() { window.open(`https://wa.me/6285134770776?text=Halo+VynnHost,+saya+order+${pName}+seharga+${pPrice}.+Ini+buktinya:`, '_blank'); }
+
+        
+
+        const canvas = document.getElementById('s-canvas'); const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+        let stars = []; for(let i=0; i<100; i++) stars.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5, spd: Math.random()*0.3});
+
+        function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = "white"; stars.forEach(st => { ctx.beginPath(); ctx.arc(st.x, st.y, st.size, 0, Math.PI*2); ctx.fill(); st.y += st.spd; if(st.y > canvas.height) st.y = 0; }); requestAnimationFrame(draw); }
+
+        draw();
+
+    </script>
+
+</body>
+
+</html>
